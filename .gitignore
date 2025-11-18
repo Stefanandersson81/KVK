@@ -1,0 +1,12 @@
+# Node / package manager
+node_modules
+package-lock.json
+
+# Playwright artifacts
+test-results
+playwright-report
+blob-report
+playwright/.cache
+
+# TypeScript build output
+dist
