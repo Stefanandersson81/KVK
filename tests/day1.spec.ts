@@ -3,12 +3,14 @@ import config from '../playwright.config';
 import { KodsystemPage } from '../src/pages/KodsystemPage';
 import { AktivKodsystemPage } from '../src/pages/aktivKodsystemPage';
 import { PopupRutorPage } from '../src/pages/PopupRutorPage';
+import { AktiveraKodsystemPage } from '../src/pages/aktiveraKodsystemPage';
 
 let context: BrowserContext;
 let page: Page;
 let kodsystemPage: KodsystemPage;
 let aktivKodsystemPage: AktivKodsystemPage;
 let popupRutorPage: PopupRutorPage;
+let aktiveraKodsystemPage: AktiveraKodsystemPage;
 
 test.describe('skapar och aktivera kodystem för verifieras dag 2', () => {
   test.beforeAll(async ({ browser }) => {
@@ -17,6 +19,7 @@ test.describe('skapar och aktivera kodystem för verifieras dag 2', () => {
     kodsystemPage = new KodsystemPage(page);
     aktivKodsystemPage = new AktivKodsystemPage(page);
     popupRutorPage = new PopupRutorPage(page);
+    aktiveraKodsystemPage = new AktiveraKodsystemPage(page);
 
     await kodsystemPage.openKodsystem();
   });
@@ -37,7 +40,7 @@ test.describe('skapar och aktivera kodystem för verifieras dag 2', () => {
     });
   });
 
-  test('Skapa ett utkast av ett aktiv kodsystem och lägg koder och aktiver för dagen efter', async () => {
+  test('Skapa ett utkast av ett aktiv kodsystem och lägg koder och aktivera för dagen efter', async () => {
     await test.step('Öppna "Kodsystem" och välj aktivt system', async () => {
       await aktivKodsystemPage.createDraftFromActiveSystem('ASA');
     });
@@ -71,6 +74,20 @@ test.describe('skapar och aktivera kodystem för verifieras dag 2', () => {
     });
   });
 
-  
+  test('Aktivera utkastet med inaktivering och återaktivering', async () => {
+     await test.step('Öppna utkastet och trycker på AKTIVERA', async () => {
+      await aktivKodsystemPage.aktiverUtkastet();
+    });
+
+     await test.step('Sätter morgondagens datum och sparar', async () => {
+     await aktiveraKodsystemPage.activateDraft();
+    });
+
+     await test.step('Validera aktiverings datum för utkastet', async () => {
+      await aktiveraKodsystemPage.valideraAttDatumFinnsPåAktiveradeUtkast();
+    });
+    
+  });
+
 
 });
